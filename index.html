@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اطلب توكتوكك</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@900&family=Tajawal:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo', sans-serif;}
+  body{background:#000;color:#fff;overflow-x:hidden}
+  .hero{
+    height:100vh;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    background:url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1200') center/cover;
+  }
+  .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px)}
+  .toktok-img{
+    position:absolute;bottom:10%;width:80%;max-width:400px;z-index:2;
+    filter:drop-shadow(0 0 20px #aaff00);transition:transform 0.1s;
+    animation:move 3s infinite alternate ease-in-out;
+  }
+  @keyframes move{from{transform:translateX(-10px)}to{transform:translateX(10px)}}
+  .title{
+    z-index:3;font-size:42px;font-weight:900;color:#c8ff00;
+    text-shadow:0 0 20px #c8ff00,0 0 40px #c8ff00;
+    font-family:'Tajawal', sans-serif;text-align:center;
+  }
+  .box{
+    background:#111;border:1px solid #333;border-radius:20px;
+    padding:20px;margin:15px;width:90%;max-width:500px;z-index:3;
+  }
+  .box h2{font-size:22px;margin-bottom:10px;color:#c8ff00}
+  #map,#map2{height:180px;border-radius:15px;margin-top:10px}
+  input{
+    width:100%;padding:15px;border-radius:12px;border:2px solid #c8ff00;
+    background:#000;color:#fff;font-size:24px;font-weight:900;text-align:center;
+  }
+  .btn{
+    background:#c8ff00;color:#000;padding:18px;width:90%;max-width:500px;
+    border-radius:15px;font-size:26px;font-weight:900;border:none;margin:20px;
+    box-shadow:0 0 30px #c8ff00;cursor:pointer;z-index:3;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero" id="hero">
+  <h1 class="title">مرحبا بك في اطلب توكتوكك</h1>
+  <img src="https://i.ibb.co/3mT0c0XQ/tuktuk.png" class="toktok-img" id="toktok" alt="toktok" onerror="this.style.display='none'">
+  
+  <div class="box">
+    <h2>📍 انت فين يا بطل؟</h2>
+    <div id="map"></div>
+    <small id="fromText">اختار مكانك في اي حتة في مصر</small>
+  </div>
+
+  <div class="box">
+    <h2>🏁 رايح فين يا بطل؟</h2>
+    <div id="map2"></div>
+    <small id="toText">اختار وجهتك</small>
+  </div>
+
+  <div class="box">
+    <h2>💰 اكتب السعر اللي يناسبك</h2>
+    <input type="number" id="price" placeholder="25" min="25" value="25">
+    <small style="color:#888">الحد الأدنى 25ج - بفونت جامد</small>
+  </div>
+
+  <button class="btn" onclick="order()">اطلب توكتوكك حالا 🛺</button>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // خريطة مصر
+  var map = L.map('map').setView([30.0444, 31.2357], 6);
+  var map2 = L.map('map2').setView([30.0444, 31.2357], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map2);
+  var m1,m2;
+  map.on('click',e=>{if(m1)map.removeLayer(m1);m1=L.marker(e.latlng).addTo(map);document.getElementById('fromText').innerText='مكانك: '+e.latlng.lat.toFixed(3)+','+e.latlng.lng.toFixed(3)});
+  map2.on('click',e=>{if(m2)map2.removeLayer(m2);m2=L.marker(e.latlng).addTo(map2);document.getElementById('toText').innerText='رايح: '+e.latlng.lat.toFixed(3)+','+e.latlng.lng.toFixed(3)});
+
+  // حركة الخلفية مع حركة الموبايل
+  window.addEventListener('deviceorientation',e=>{
+    let x=e.gamma/10, y=e.beta/10;
+    document.getElementById('hero').style.backgroundPosition=`${50+x}% ${50+y}%`;
+    document.getElementById('toktok').style.transform=`translate(${x*2}px, ${y}px)`;
+  });
+
+  function order(){
+    let p=document.getElementById('price').value;
+    if(p<25){alert('يا بطل الحد الأدنى 25 جنيه!');return;}
+    alert('تم! طلبك بـ '+p+' جنيه اتبعت لأقرب توكتوك ليك 🛺💨');
+  }
+</script>
+</body>
+</html>
