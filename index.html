@@ -5,126 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اطلب توكتوكك</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:#000;color:#fff}
-#splash{position:fixed;inset:0;z-index:999;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:0.8s}
-#splash h1{font-size:38px;font-weight:900;color:#d4ff00;text-shadow:0 0 25px #d4ff00;text-align:center}
-#splash img{width:90%;max-width:420px;margin-top:30px;animation:float 1.5s infinite alternate}
-@keyframes float{from{transform:translateY(0)}to{transform:translateY(-15px)}}
-.page{display:none;padding:20px;max-width:600px;margin:auto}
+body{background:#000;color:#fff;min-height:100vh;background:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1200') center/cover fixed}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:0}
+.content{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+#splash{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+#splash h1{font-size:42px;font-weight:900;color:#d4ff00;text-shadow:0 0 25px #d4ff00;line-height:1.3}
+.page{display:none;max-width:600px;margin:auto;width:100%;padding:20px}
 .page.active{display:block}
-.hero-text{background:linear-gradient(180deg,#111,#000);border-radius:25px;padding:25px;margin-top:20px;border:1px solid #222}
-.hero-text h2{color:#d4ff00;font-size:28px;margin:15px 0}
-.hero-text p{color:#ccc;line-height:1.9;font-size:17px}
-.btn{background:#d4ff00;color:#000;padding:18px;border-radius:15px;font-size:24px;font-weight:900;border:none;width:100%;margin-top:20px;box-shadow:0 0 30px #d4ff00;cursor:pointer}
-.box{background:#111;border:1px solid #333;border-radius:20px;padding:20px;margin:15px 0}
-.box h3{color:#d4ff00;margin-bottom:10px}
-#map,#map2{height:200px;border-radius:15px}
-input{width:100%;padding:14px;border-radius:12px;border:2px solid #d4ff00;background:#000;color:#fff;font-size:22px;font-weight:900;text-align:center;margin-top:10px}
+.card{background:rgba(20,20,20,0.95);border:1px solid #333;border-radius:22px;padding:22px;margin:12px 0}
+.btn{background:#d4ff00;color:#000;padding:18px;border-radius:16px;font-size:23px;font-weight:900;border:none;width:100%;box-shadow:0 0 25px #d4ff00;cursor:pointer;margin-top:15px}
+textarea,input{width:100%;padding:14px;border-radius:12px;border:2px solid #d4ff00;background:#000;color:#fff;font-size:18px;font-weight:700;margin-top:10px}
+.timer{font-size:70px;font-weight:900;color:#d4ff00;text-align:center}
+.plate{background:#fff;color:#000;padding:8px 18px;border-radius:8px;font-weight:900;font-size:22px;display:inline-block;margin:10px 0}
 .confirm{background:#111;border:2px solid #d4ff00;border-radius:25px;padding:25px;text-align:center}
-.plate{background:#fff;color:#000;padding:8px 18px;border-radius:8px;font-weight:900;font-size:22px;display:inline-block;margin:10px 0;border:2px solid #000}
-.notice{background:#220;color:#ff9;font-size:13px;padding:12px;border-radius:10px;margin-top:15px}
 </style>
 </head>
 <body>
+<div class="overlay"></div>
+<div class="content">
 
 <div id="splash">
   <h1>مرحبا بك في<br>اطلب توكتوكك</h1>
-  <img src="https://i.ibb.co/Qv0fNfS/tuktuk-yellow.png" alt="toktok" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3774/3774090.png'">
+  <p style="color:#888;margin-top:10px">...</p>
 </div>
 
-<!-- الصفحة الطويلة -->
 <div id="landing" class="page">
-  <div class="hero-text">
-    <h2>ليه تطلب توكتوكك من عندنا؟ 🛺</h2>
-    <p>احنا مش مجرد توصيلة، احنا أمانك في الشارع.</p>
-    <h2>✅ سواقين مختارين بعناية</h2>
-    <p>كل سواق عندنا بنختاره بعد فحص كامل، بطاقته سليمة، وسمعته معروفة في منطقته. مفيش سواق عشوائي يركبك.</p>
-    <h2>🛡️ انت في أمان</h2>
-    <p>رحلتك متسجلة، رقم التوكتوك معروف، وتقدر تبعت موقعك المباشر لأهلك. لو حصل اي حاجة الادارة بترد في ثانية.</p>
-    <h2>⚡ أسرع توكتوك في مصر</h2>
-    <p>من كفر شنوان لشبين، من القاهرة لأسوان، هتلاقي توكتوك جنبك في 5 دقايق بس. وانت اللي بتحدد السعر!</p>
-    <h2>💸 سعر عادل</h2>
-    <p>مفيش استغلال. انت بتكتب السعر اللي يناسبك والحد الأدنى 25ج بس. اتفاق واضح من الأول.</p>
+  <div class="card">
+    <h2 style="color:#d4ff00">ليه تطلب توكتوكك؟ 🛺</h2>
+    <p style="color:#ddd;line-height:1.9;margin-top:10px">
+    سواقين مختارين بعناية جدا، كل سواق ببطاقته وفيشه وسمعته معروفة.<br><br>
+    ✅ انت في امان - رحلتك متسجلة ورقم التوكتوك معروف وتقدر تبعت موقعك لاهلك<br><br>
+    ⚡ اسرع توكتوك في مصر - بنوصلك في 5 دقايق<br><br>
+    💸 انت اللي بتحدد السعر - الحد الادنى 25ج بس
+    </p>
   </div>
   <button class="btn" onclick="showBooking()">اطلب رحلتك يلا يا بطل 🚀</button>
 </div>
 
-<!-- صفحة الطلب -->
 <div id="booking" class="page">
-  <div style="text-align:center;margin-bottom:20px">
-    <img src="https://i.ibb.co/Qv0fNfS/tuktuk-yellow.png" style="width:280px;filter:drop-shadow(0 0 20px #d4ff00)" onerror="this.style.display='none'">
+  <div class="card">
+    <h3 style="color:#d4ff00">📍 انت فين يا بطل؟</h3>
+    <textarea id="from" rows="2" placeholder="مثال: المنوفية، شبين الكوم، شارع الجلاء"></textarea>
   </div>
-  <div class="box">
-    <h3>📍 منين يا بطل؟ اختار اي مكان في مصر</h3>
-    <div id="map"></div>
-    <small id="fromText">دوس على الخريطة</small>
+  <div class="card">
+    <h3 style="color:#d4ff00">🏁 رايح فين يا بطل؟</h3>
+    <textarea id="to" rows="2" placeholder="مثال: المنوفية، قويسنا، شارع السوق"></textarea>
   </div>
-  <div class="box">
-    <h3>🏁 رايح فين يا بطل؟ اختار اي مكان في مصر</h3>
-    <div id="map2"></div>
-    <small id="toText">دوس على الخريطة</small>
+  <div class="card">
+    <h3 style="color:#d4ff00">💰 ايه السعر اللي يناسبك يا بطل؟</h3>
+    <input type="number" id="price" min="25" value="30">
   </div>
-  <div class="box">
-    <h3>💰 ايه السعر اللي يناسبك يا بطل؟</h3>
-    <input type="number" id="price" min="25" value="30" placeholder="25">
-  </div>
-  <button class="btn" onclick="confirmOrder()">أكد الطلب</button>
+  <button class="btn" onclick="startWaiting()">اطلب حالاً</button>
 </div>
 
-<!-- صفحة التأكيد -->
+<div id="waiting" class="page">
+  <div class="card" style="text-align:center">
+    <h3>جاري عرض سعرك على السواقين...</h3>
+    <div class="timer" id="timer">30</div>
+    <p id="priceShow" style="color:#d4ff00;font-weight:900"></p>
+  </div>
+</div>
+
 <div id="confirm" class="page">
   <div class="confirm">
-    <h1 style="color:#d4ff00">توكتوكك في الطريق! 🛺💨</h1>
-    <div style="margin:20px 0">
-      <p>توكتوك رقم</p>
-      <div class="plate" id="plateNum">أ ج د ٥٦٠٩</div>
-      <p>جايلك دلوقتي في خلال <b>5 دقايق</b></p>
+    <h1 style="color:#d4ff00">السائق وافق! ✅</h1>
+    <p style="margin-top:15px">توكتوك رقم</p>
+    <div class="plate" id="plateNum"></div>
+    <p>جايلك دلوقتي في خلال <b>5 دقايق</b></p>
+    <h2 id="driverPhone" style="margin:15px 0"></h2>
+    <p>سعرك: <b id="finalPrice" style="color:#d4ff00"></b> جنيه</p>
+    <div style="margin-top:20px">
+      <a id="waAdmin" href="#" target="_blank" style="background:#d4ff00;color:#000;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:900;display:inline-block">لو في اي اختلاف في السعر تواصل مع الادارة</a>
     </div>
-    <h2 id="phoneNum" style="color:#fff;margin:15px 0">📞 01012345678</h2>
-    <p>ده رقم السواق كلمه دلوقتي</p>
-    <p style="margin-top:10px">سعرك: <b id="finalPrice" style="color:#d4ff00"></b> جنيه</p>
-    <div class="notice">⚠️ تنبيه: لو في اي اختلاف في السعر الرجاء التواصل مع الادارة فورا على 01000000000</div>
-    <button class="btn" onclick="location.reload()" style="margin-top:20px;background:#fff">طلب جديد</button>
   </div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</div>
 <script>
-// أول 5 ثواني
-setTimeout(()=>{document.getElementById('splash').style.opacity='0';setTimeout(()=>{document.getElementById('splash').style.display='none';document.getElementById('landing').classList.add('active')},800)},5000);
-
-function showBooking(){
-  document.getElementById('landing').classList.remove('active');
-  document.getElementById('booking').classList.add('active');
-  setTimeout(()=>{map.invalidateSize();map2.invalidateSize()},300);
+setTimeout(()=>{document.getElementById('splash').style.display='none';document.getElementById('landing').classList.add('active')},5000);
+function showBooking(){document.getElementById('landing').classList.remove('active');document.getElementById('booking').classList.add('active')}
+function startWaiting(){
+ let from=document.getElementById('from').value.trim();
+ let to=document.getElementById('to').value.trim();
+ let price=document.getElementById('price').value;
+ if(!from||!to){alert('اكتب انت فين ورايح فين');return}
+ if(price<25){alert('الحد الادنى 25 جنيه');return}
+ document.getElementById('booking').classList.remove('active');
+ document.getElementById('waiting').classList.add('active');
+ document.getElementById('priceShow').innerText='سعرك: '+price+' جنيه';
+ let t=30;
+ let timer=document.getElementById('timer');
+ let iv=setInterval(()=>{t--;timer.innerText=t;if(t<=0){clearInterval(iv);showConfirm(price)}},1000);
 }
-
-var map=L.map('map').setView([30.0444,31.2357],5);
-var map2=L.map('map2').setView([30.0444,31.2357],5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map2);
-let m1,m2;
-map.on('click',e=>{if(m1)map.removeLayer(m1);m1=L.marker(e.latlng).addTo(map);document.getElementById('fromText').innerText='تمام ✓ مكانك اتحدد'});
-map2.on('click',e=>{if(m2)map2.removeLayer(m2);m2=L.marker(e.latlng).addTo(map2);document.getElementById('toText').innerText='تمام ✓ وجهتك اتحددت'});
-
-function confirmOrder(){
-  let p=document.getElementById('price').value;
-  if(p<25){alert('الحد الأدنى 25 جنيه يا بطل!');return;}
-  if(!m1||!m2){alert('اختار منين ورايح فين من الخريطة الأول');return;}
-  // نمر عشوائية
-  const letters=['أ','ب','ج','د','ر','س','ص','ط','ع','ق','ل','م','ن','ه','و'];
-  let l1=letters[Math.floor(Math.random()*letters.length)];
-  let l2=letters[Math.floor(Math.random()*letters.length)];
-  let l3=letters[Math.floor(Math.random()*letters.length)];
-  let num=Math.floor(1000+Math.random()*9000);
-  document.getElementById('plateNum').innerText=`${l1} ${l2} ${l3} ${num}`;
-  document.getElementById('phoneNum').innerText='📞 01'+Math.floor(100000000+Math.random()*900000000);
-  document.getElementById('finalPrice').innerText=p;
-  document.getElementById('booking').classList.remove('active');
-  document.getElementById('confirm').classList.add('active');
+function showConfirm(price){
+ const letters=['أ','ب','ج','د','ر','س','ص','ط','ع','ق','ل','م','ن','ه','و'];
+ let l1=letters[Math.floor(Math.random()*letters.length)];
+ let l2=letters[Math.floor(Math.random()*letters.length)];
+ let l3=letters[Math.floor(Math.random()*letters.length)];
+ let num=Math.floor(1000+Math.random()*9000);
+ let plate=`${l1} ${l2} ${l3} ${num}`;
+ let driverNum='01'+Math.floor(100000000+Math.random()*900000000);
+ document.getElementById('plateNum').innerText=plate;
+ document.getElementById('driverPhone').innerText='📞 رقم السواق: '+driverNum;
+ document.getElementById('finalPrice').innerText=price;
+ let msg=encodeURIComponent(`عندي مشكله بخصوص توك رقم ${plate} - السواق ${driverNum} - من ${document.getElementById('from').value} الى ${document.getElementById('to').value} - السعر ${price} جنيه`);
+ document.getElementById('waAdmin').href=`https://wa.me/201043276021?text=${msg}`;
+ document.getElementById('waiting').classList.remove('active');
+ document.getElementById('confirm').classList.add('active');
 }
 </script>
 </body>
